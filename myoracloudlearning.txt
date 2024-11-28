@@ -1,0 +1,210 @@
+Oracle Cloud Infrastructure 2024 Foundations Associate (1Z0-1085-24)
+
+IAM - Identity and access management
+Principals - entities that are allowed to interact with OCI resources, three types Users, Resources, Groups
+
+Authentication/Identity: (AuthN)
+Username/Password
+API Signing Keys
+Authentication tokens
+Princpals
+Federated Identity
+MFA
+
+Permission: (AuthZ)
+Policies which can be associated with Tenancy or Compartments
+Verbs - Manage, Read, Use, inspect
+
+Two groups present in a Domain by default are:
+All Domains Users
+Domain Administrators - Atleast one user in the group, cannot be deleted, has one policy which gives "ALL ACCESS" to resources in the tenancy.
+
+Compartments:
+- There are containers holding resources.
+- They can be multi-regional...present in all regions where you are subscribed to.
+- They can be nested upto SIX levels.
+
+Default domain:
+- cannot be deactivated or deleted
+- cannot be hidden from sign-in page
+- replicated to all regions which has been subscribed too.
+
+New Created Domains are not replicated to all subscribed regions.
+New domains are assigned to the Selected Identity Domain region during creation.
+If this new Domain needs to access resources in other regions then the Identity Domain needs to be replicated to that region
+
+New Domain creation:
+- First create Compartment
+- Create Domain along with first Domain Admin details
+- New Domain with TWO default groups - Domain Administrators and All Users groups are created
+- Both these groups cannot be deleted
+- All new users are by default added to "All Users" group
+
+Polices:
+Four keys aspects:
+- Subject
+- Action
+- Placement
+- Condition
+Always ALLOWS, there is no DENY policy.
+Subjects can be groups,dynamic groups,group_id_ocid, "any user" => Any user in that tenancy.
+If DomanName is not provided then DEFAULT domain is implied.
+Placement - This is where you are allowing the Subject to perform an action...example - Compartments and Tenancy
+Only Identity resource does not have "Aggregate Resource Type"...Others like Databases, Instances, Storage and Network have Aggregate Resource Type
+
+Policy Inheritance:
+- Polices applied to parent compartments are inheretied by child compartments
+- Administrators policy on Default Domain is not changeable or deletable.
+
+TBAC - Tag based access control
+- Requestor - Groups,Dynamic Groups, Compartments - "request.princpal.group.tag.<namespace>.tag"
+- Target - Resource, Compartment = "target.resource.tag.<namespace>.tag", "target.resource.compartment.tag.<namespace>.tag"
+
+All OCI services support:
+- request.princpal.group
+- request.princpal.compartment
+- target.resource.compartment.tag
+
+No all resources support:
+- target.resource.tag
+
+Princpal - Identity of caller trying to access resource
+User - 
+Instance - 
+Service - 
+Resource - Infrastructure, Stacked, Ephemeral
+Infrastructure Principal - Resource that is authorized to be a actor that can make a request to another resource...eg.Birth Certificate
+Stacked Princpal - A service that make a calls to another resource and control it...eg. Database service
+Ephemeral Principal - Injected identifiers, service identifies who is the holder of a resource for a short period of time....eg: Oracle Function
+
+Dynamic Groups need matching rules, which states what type of resource become part of that group dynamically. Eg: Instance resource during add/removal
+
+
+Compute Instance Placement:
+- On Demand Capacity
+- Preemptible Capacity
+- Capacity Reservation
+- Dedicated Host
+- Computer Cluster
+
+
+PAYE to Pay for what you Consume model.(Consumption Based)
+
+OCI Data Migration:
+Data Transfer Disk
+Data Transfer Appliance
+Storage Gateway
+
+Object Storage:
+Hot, Intermediate(Min Ret 60days) , Archive(Min Ret 90days) 
+
+OCI CLI:
+oci os bucket create --compartment-id ocid1.compartment.oc1..aaaaaaaa2jpt4nrjosjuldzwgl6ynspzz6zpd5befm5l6jil4dlyayejw3zq --name arch_bucket --namespace-name lrvvlq6e320n --storage-tier archive
+oci os object put -bn ociaabucket-cloudshell -ns lrvvlq6e320n --file I:\ISO_Images\linux-lite-7.2-64bit.iso ==> Multipart Upload
+oci os object list -bn ociaabucket-cloudshell -ns lrvvlq6e320n ==> List Objects in Bucket
+allow service objectstorage-uk-london-1 to manage object-family in compartment ProdComp
+
+Block Volume Tiers:
+Lower Cost
+Balanced
+High Performance
+Ultr High Performance
+
+DFS - NFS, SMB(Server Messaging Block)
+
+Infrastructure Protection:
+DDoS Protection
+Network Security Protocol
+Virtual Firewalls
+Filter Malicious web traffic
+
+IAM:
+MFA, User/Password, Fedaration, Audit
+
+OS/Workload Protection:
+Sheilded Instances
+Dedicated Hosts
+Bastion
+OS Management
+
+Data Protection:
+Vaults Keys Mgt
+Vaults Secrets Mgt
+Data Safe 
+Certificates
+
+Detection and Remediation:
+Cloud Guard
+Security Zones
+Threat Intelligence
+Vulnerability Scanning
+
+Cloud Guard must be enabled before enabling security zones
+Security Zone are part of the tenancy where Security cannot be avoided.
+Security Zones are applied on Compartments.
+
+Secrets:
+Passwords
+Certificates
+SSH-Keys
+Auth Tokens
+
+VCN:
+Securty - Security Lists, NSG(NW security group)
+Difference between two:
+SL - Subnets...upto FIVE
+NSG - VNIC....upto FIVE
+
+Gateways:
+IGW
+NAT GW
+Service GW
+DRG
+
+Subnets are created public or private, once created cannot be changed.
+
+NAT GW supports - ICMP, TCP, UDP traffic
+NAT GW external IP is epheremal or reserved IP
+
+OSN - Oracle Services Network
+Has reserved Public IP address
+
+Gpj9b4cz
+
++44 207 5626 823
++441189247900
+	+44.207.1312.982 / 35318031792
+CSI 21426672
+
+oraclehelp_ww@oracle.com
+
+
+allow group 'ProdDomain1/Domain_Adminstrators' to manage all-resources in compartment prodcomp
+allow group ProdDomain1/Domain_Administrators to manage all-resources in compartment ProdComp
+Allow any-user to manage instance-family in compartment ProdComp where request.principal.group.tag.usertype.typeofuser= 'Developer'
+
+allow any-user to manage virtual-network-family in compartment ProdComp where request.principal.group.tag.UserType.TypeOfUser= 'Tester'
+allow any-user to use virtual-network-family in compartment ProdComp where request.principal.group.tag.usertype.typeofuser= 'Developer'
+allow group 'ProdDomain1'/'Domain_Administrators' to use cloud-shell in tenancy where request.principal.group.tag.usertype.typeofuser= 'Developer'
+
+VCN security:
+- Security Rules(Security Lists, NSG)
+- Public and Private Subnets
+- IAM Policies
+- Security Zones (Logical containers of resources that meets Oracle security recommendations)...can be applied only to Compartments...Public IP not allowed here
+- Firewalls directly on instances
+
+NSG: (VM, APIGW, Mount Volume)
+Ingress
+Source Type - CIDR, Service, Another NSG
+Source Protocol - RDP, ICMP, SSH
+Source Port Range
+Dest Port Range
+Egress:
+Dest Type - CIDR, Service, Another NSG
+Dest Protocol - RDP, ICMP, SSH
+Dest Port Range
+Source Port Range
+
+VNIC can be associated with max of 33 Private IP address.
+Upto 50 Reserved Public IP address within a VSN
